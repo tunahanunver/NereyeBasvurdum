@@ -1,0 +1,255 @@
+﻿@model NereyeBasvurdumProject.Models.Basvurularim
+
+@{
+    ViewData["Title"] = "Başvuru Detayları";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Başlık -->
+            <div class="text-center mb-4">
+                <h2 class="text-info">
+                    <i class="fas fa-eye me-2"></i>Başvuru Detayları
+                </h2>
+                <p class="text-muted">@Model.Sirket şirketindeki başvuru bilgileriniz</p>
+            </div>
+
+            <!-- Ana Bilgi Kartı -->
+            <div class="card shadow-lg border-0 mb-4">
+                <div class="card-header bg-info text-white py-4">
+                    <div class="row align-items-center">
+                        <div class="col">
+                            <h4 class="mb-0">
+                                <i class="fas fa-building me-2"></i>@Model.Sirket
+                            </h4>
+                            <p class="mb-0 opacity-75">@Model.Pozisyon</p>
+                        </div>
+                        <div class="col-auto">
+                            @{
+                                string badgeClass = Model.Durum switch
+                                {
+                                    "Kabul" => "bg-success",
+                                    "Red" => "bg-danger", 
+                                    "Mülakat" => "bg-warning text-dark",
+                                    "İnceleniyor" => "bg-primary",
+                                    _ => "bg-secondary"
+                                };
+                                string icon = Model.Durum switch
+                                {
+                                    "Kabul" => "fas fa-check-circle",
+                                    "Red" => "fas fa-times-circle",
+                                    "Mülakat" => "fas fa-comments",
+                                    "İnceleniyor" => "fas fa-eye",
+                                    _ => "fas fa-clock"
+                                };
+                            }
+                            <span class="badge @badgeClass px-3 py-2 fs-6">
+                                <i class="@icon me-1"></i>@Model.Durum
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="card-body p-4">
+                    <div class="row g-4">
+                        <!-- Lokasyon -->
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-map-marker-alt text-white fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 text-primary">Lokasyon</h6>
+                                    <p class="mb-0 fw-bold">
+                                        @(string.IsNullOrEmpty(Model.Lokasyon) ? "Belirtilmemiş" : Model.Lokasyon)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Deneyim -->
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                <div class="bg-success rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-chart-line text-white fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 text-success">Deneyim Seviyesi</h6>
+                                    <p class="mb-0 fw-bold">
+                                        @(string.IsNullOrEmpty(Model.Deneyim) ? "Belirtilmemiş" : Model.Deneyim)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Başvuru Aracı -->
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                <div class="bg-warning rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-globe text-white fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 text-warning">Başvuru Aracı</h6>
+                                    <p class="mb-0 fw-bold">
+                                        @(string.IsNullOrEmpty(Model.Araci) ? "Belirtilmemiş" : Model.Araci)
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Başvuru Tarihi -->
+                        <div class="col-md-6">
+                            <div class="d-flex align-items-center p-3 bg-light rounded">
+                                <div class="bg-info rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                                    <i class="fas fa-calendar text-white fa-lg"></i>
+                                </div>
+                                <div>
+                                    <h6 class="mb-1 text-info">Başvuru Tarihi</h6>
+                                    <p class="mb-0 fw-bold">@Model.BasvuruTarihi.ToString("dd MMMM yyyy")</p>
+                                    <small class="text-muted">@((DateTime.Now - Model.BasvuruTarihi).Days) gün önce</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Zaman Çizelgesi Kartı -->
+            <div class="card shadow border-0 mb-4">
+                <div class="card-header bg-light">
+                    <h5 class="mb-0">
+                        <i class="fas fa-clock me-2"></i>Başvuru Süreci
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item completed">
+                            <div class="timeline-marker bg-success">
+                                <i class="fas fa-paper-plane text-white"></i>
+                            </div>
+                            <div class="timeline-content">
+                                <h6 class="mb-1">Başvuru Gönderildi</h6>
+                                <p class="text-muted mb-0">@Model.BasvuruTarihi.ToString("dd MMMM yyyy")</p>
+                            </div>
+                        </div>
+
+                        @if(Model.Durum != "Beklemede")
+                        {
+                            <div class="timeline-item completed">
+                                <div class="timeline-marker bg-info">
+                                    <i class="fas fa-eye text-white"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">Başvuru İnceleniyor</h6>
+                                    <p class="text-muted mb-0">Şirket başvurunuzu değerlendiriyor</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if(Model.Durum == "Mülakat" || Model.Durum == "Kabul")
+                        {
+                            <div class="timeline-item completed">
+                                <div class="timeline-marker bg-warning">
+                                    <i class="fas fa-comments text-white"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1">Mülakat Aşaması</h6>
+                                    <p class="text-muted mb-0">Mülakat sürecine geçildi</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if(Model.Durum == "Kabul")
+                        {
+                            <div class="timeline-item completed">
+                                <div class="timeline-marker bg-success">
+                                    <i class="fas fa-check-circle text-white"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1 text-success">Başvuru Kabul Edildi! 🎉</h6>
+                                    <p class="text-muted mb-0">Tebrikler! Başarılı bir sonuç aldınız.</p>
+                                </div>
+                            </div>
+                        }
+
+                        @if(Model.Durum == "Red")
+                        {
+                            <div class="timeline-item completed">
+                                <div class="timeline-marker bg-danger">
+                                    <i class="fas fa-times-circle text-white"></i>
+                                </div>
+                                <div class="timeline-content">
+                                    <h6 class="mb-1 text-danger">Başvuru Red Edildi</h6>
+                                    <p class="text-muted mb-0">Bu sefer olmadı ama pes etmeyin!</p>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <!-- İşlem Butonları -->
+            <div class="card shadow border-0">
+                <div class="card-body p-4">
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+                        <a asp-action="Index" class="btn btn-outline-secondary btn-lg">
+                            <i class="fas fa-arrow-left me-2"></i>Başvuru Listesi
+                        </a>
+                        <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning btn-lg">
+                            <i class="fas fa-edit me-2"></i>Düzenle
+                        </a>
+                        <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-outline-danger btn-lg">
+                            <i class="fas fa-trash me-2"></i>Sil
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .timeline {
+        position: relative;
+        padding: 0;
+        list-style: none;
+    }
+
+    .timeline-item {
+        position: relative;
+        margin-bottom: 30px;
+        padding-left: 60px;
+    }
+
+    .timeline-item:not(:last-child):before {
+        content: '';
+        position: absolute;
+        left: 19px;
+        top: 40px;
+        height: calc(100% + 10px);
+        width: 2px;
+        background: #dee2e6;
+    }
+
+    .timeline-item.completed:not(:last-child):before {
+        background: #28a745;
+    }
+
+    .timeline-marker {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 3px solid white;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+
+    .timeline-content {
+        padding-top: 5px;
+    }
+</style>

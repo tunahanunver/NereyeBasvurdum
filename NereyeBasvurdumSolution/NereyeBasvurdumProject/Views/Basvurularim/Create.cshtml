@@ -1,0 +1,170 @@
+﻿@model NereyeBasvurdumProject.Models.Basvurularim
+
+@{
+    ViewData["Title"] = "Yeni Başvuru Ekle";
+}
+
+<div class="container mt-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8 col-md-10">
+            <!-- Başlık -->
+            <div class="text-center mb-4">
+                <h2 class="text-primary">
+                    <i class="fas fa-plus-circle me-2"></i>Yeni İş Başvurusu Ekle
+                </h2>
+                <p class="text-muted">Başvuru bilgilerinizi eksiksiz doldurun</p>
+            </div>
+
+            <!-- Form Kartı -->
+            <div class="card shadow-lg border-0">
+                <div class="card-header bg-gradient-primary text-white py-4">
+                    <h5 class="mb-0 text-center">
+                        <i class="fas fa-edit me-2"></i>Başvuru Formu
+                    </h5>
+                </div>
+                <div class="card-body p-4">
+                    <form asp-action="Create" id="basvuruForm">
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+                        
+                        <!-- Şirket ve Pozisyon -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Sirket" class="form-control" id="sirket" placeholder="Şirket Adı" />
+                                    <label for="sirket">
+                                        <i class="fas fa-building me-2"></i>Şirket Adı *
+                                    </label>
+                                    <span asp-validation-for="Sirket" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Pozisyon" class="form-control" id="pozisyon" placeholder="Pozisyon" />
+                                    <label for="pozisyon">
+                                        <i class="fas fa-user-tie me-2"></i>Pozisyon *
+                                    </label>
+                                    <span asp-validation-for="Pozisyon" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Lokasyon ve Deneyim -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Lokasyon" class="form-control" id="lokasyon" placeholder="Lokasyon" />
+                                    <label for="lokasyon">
+                                        <i class="fas fa-map-marker-alt me-2"></i>Lokasyon
+                                    </label>
+                                    <span asp-validation-for="Lokasyon" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Deneyim" type="text" class="form-control" id="deneyim" placeholder="Deneyim Seviyesi">
+                                    <label for="deneyim">
+                                        <i class="fas fa-chart-line me-2"></i>Deneyim Seviyesi
+                                    </label>
+                                    <span asp-validation-for="Deneyim" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Başvuru Aracı ve Tarih -->
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="Araci" type="text" class="form-control" id="araci" placeholder="Başvuru Aracı">
+                                    <label for="araci">
+                                        <i class="fas fa-globe me-2"></i>Başvuru Aracı
+                                    </label>
+                                    <span asp-validation-for="Araci" class="text-danger"></span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input asp-for="BasvuruTarihi" class="form-control" type="date" id="basvuruTarihi" />
+                                    <label for="basvuruTarihi">
+                                        <i class="fas fa-calendar me-2"></i>Başvuru Tarihi *
+                                    </label>
+                                    <span asp-validation-for="BasvuruTarihi" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Durum -->
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <div class="form-floating">
+                                    <select asp-for="Durum" class="form-select" id="durum">
+                                        <option value="Başvuru Yapıldı">Başvuru Yapıldı</option>
+                                    </select>
+                                    <label for="durum">
+                                        <i class="fas fa-info-circle me-2"></i>Başvuru Durumu
+                                    </label>
+                                    <span asp-validation-for="Durum" class="text-danger"></span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Butonlar -->
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                                    <a asp-action="Index" class="btn btn-outline-secondary btn-lg me-md-2">
+                                        <i class="fas fa-arrow-left me-2"></i>Geri Dön
+                                    </a>
+                                    <button type="submit" class="btn btn-success btn-lg px-4">
+                                        <i class="fas fa-save me-2"></i>Başvuruyu Kaydet
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Yardım Kartı -->
+            <div class="card mt-4 border-info">
+                <div class="card-body bg-light">
+                    <div class="row align-items-center">
+                        <div class="col-auto">
+                            <i class="fas fa-lightbulb fa-2x text-info"></i>
+                        </div>
+                        <div class="col">
+                            <h6 class="mb-1">💡 İpucu</h6>
+                            <small class="text-muted">
+                                Başvuru sürecinizi daha iyi takip edebilmek için tüm alanları eksiksiz doldurmaya çalışın. 
+                                Daha sonra düzenleme yapabilirsiniz.
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        // Bugünü varsayılan tarih olarak ayarla
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('basvuruTarihi');
+            if (!dateInput.value) {
+                dateInput.value = new Date().toISOString().split('T')[0];
+            }
+        });
+
+        // Form validasyonu
+        document.getElementById('basvuruForm').addEventListener('submit', function(e) {
+            const sirket = document.getElementById('sirket').value;
+            const pozisyon = document.getElementById('pozisyon').value;
+            
+            if (!sirket || !pozisyon) {
+                e.preventDefault();
+                alert('Şirket adı ve pozisyon alanları zorunludur!');
+            }
+        });
+    </script>
+}

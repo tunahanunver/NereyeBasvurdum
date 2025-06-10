@@ -1,0 +1,217 @@
+﻿@model IEnumerable<NereyeBasvurdumProject.Models.Basvurularim>
+
+@{
+    ViewData["Title"] = "İş Başvurularım";
+}
+
+<div class="container-fluid mt-4">
+    <div class="row">
+        <div class="col-12">
+            <!-- Başlık ve Ekle Butonu -->
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <div>
+                    <h2 class="text-primary mb-1">
+                        <i class="fas fa-briefcase me-2"></i>İş Başvurularım
+                    </h2>
+                    <p class="text-muted mb-0">Başvuru süreçlerinizi takip edin ve yönetin</p>
+                </div>
+                <a asp-action="Create" class="btn btn-success btn-lg shadow-sm">
+                    <i class="fas fa-plus me-2"></i>Yeni Başvuru Ekle
+                </a>
+            </div>
+
+            @if (Model.Any())
+            {
+                <!-- İstatistik Kartları -->
+                <div class="row mb-4">
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card bg-primary text-white shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-paper-plane fa-2x mb-2"></i>
+                                <h4>@Model.Count()</h4>
+                                <small>Toplam Başvuru</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card bg-warning text-white shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-clock fa-2x mb-2"></i>
+                                <h4>@Model.Count(x => x.Durum == "Beklemede" || x.Durum == "İnceleniyor")</h4>
+                                <small>Bekleyen</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card bg-info text-white shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-comments fa-2x mb-2"></i>
+                                <h4>@Model.Count(x => x.Durum == "Mülakat")</h4>
+                                <small>Mülakat</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 col-sm-6 mb-3">
+                        <div class="card bg-success text-white shadow-sm h-100">
+                            <div class="card-body text-center">
+                                <i class="fas fa-check-circle fa-2x mb-2"></i>
+                                <h4>@Model.Count(x => x.Durum == "Kabul")</h4>
+                                <small>Kabul</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Başvuru Tablosu -->
+                <div class="card shadow">
+                    <div class="card-header bg-light">
+                        <h5 class="mb-0 text-dark">
+                            <i class="fas fa-list me-2"></i>Başvuru Listesi
+                        </h5>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover mb-0">
+                                <thead class="table-dark">
+                                    <tr>
+                                        <th class="border-0">
+                                            <i class="fas fa-building me-1"></i>Şirket
+                                        </th>
+                                        <th class="border-0">
+                                            <i class="fas fa-user-tie me-1"></i>Pozisyon
+                                        </th>
+                                        <th class="border-0">
+                                            <i class="fas fa-map-marker-alt me-1"></i>Lokasyon
+                                        </th>
+                                        <th class="border-0">
+                                            <i class="fas fa-calendar me-1"></i>Başvuru Tarihi
+                                        </th>
+                                        <th class="border-0">
+                                            <i class="fas fa-info-circle me-1"></i>Durum
+                                        </th>
+                                        <th class="border-0 text-center">
+                                            <i class="fas fa-cogs me-1"></i>İşlemler
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var item in Model.OrderByDescending(x => x.BasvuruTarihi))
+                                    {
+                                        <tr>
+                                            <td class="align-middle">
+                                                <div class="d-flex align-items-center">
+                                                    <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 40px; height: 40px;">
+                                                        <i class="fas fa-building text-white"></i>
+                                                    </div>
+                                                    <div>
+                                                        <strong class="text-dark">@item.Sirket</strong>
+                                                        @if (!string.IsNullOrEmpty(item.Araci))
+                                                        {
+                                                            <br><small class="text-muted">@item.Araci</small>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td class="align-middle">
+                                                <strong>@item.Pozisyon</strong>
+                                                @if (!string.IsNullOrEmpty(item.Deneyim))
+                                                {
+                                                    <br><small class="text-muted">@item.Deneyim deneyim</small>
+                                                }
+                                            </td>
+                                            <td class="align-middle">
+                                                @if (!string.IsNullOrEmpty(item.Lokasyon))
+                                                {
+                                                    <span class="badge bg-light text-dark">
+                                                        <i class="fas fa-map-marker-alt me-1"></i>@item.Lokasyon
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="text-muted">-</span>
+                                                }
+                                            </td>
+                                            <td class="align-middle">
+                                                <span class="text-muted">@item.BasvuruTarihi.ToString("dd MMM yyyy")</span>
+                                                <br><small class="text-muted">@((DateTime.Now - item.BasvuruTarihi).Days) gün önce</small>
+                                            </td>
+                                            <td class="align-middle">
+                                                @{
+                                                    string badgeClass = item.Durum switch
+                                                    {
+                                                        "Kabul" => "bg-success",
+                                                        "Red" => "bg-danger",
+                                                        "Mülakat" => "bg-warning",
+                                                        "İnceleniyor" => "bg-info",
+                                                        _ => "bg-secondary"
+                                                    };
+                                                    string icon = item.Durum switch
+                                                    {
+                                                        "Kabul" => "fas fa-check-circle",
+                                                        "Red" => "fas fa-times-circle",
+                                                        "Mülakat" => "fas fa-comments",
+                                                        "İnceleniyor" => "fas fa-eye",
+                                                        _ => "fas fa-clock"
+                                                    };
+                                                }
+                                                <span class="badge @badgeClass px-3 py-2">
+                                                    <i class="@icon me-1"></i>@item.Durum
+                                                </span>
+                                            </td>
+                                            <td class="align-middle text-center">
+                                                <div class="btn-group" role="group">
+                                                    <a asp-action="Details" asp-route-id="@item.Id" 
+                                                       class="btn btn-outline-info btn-sm" 
+                                                       title="Detayları Görüntüle"
+                                                       data-bs-toggle="tooltip">
+                                                        <i class="fas fa-eye"></i>
+                                                    </a>
+                                                    <a asp-action="Edit" asp-route-id="@item.Id" 
+                                                       class="btn btn-outline-warning btn-sm" 
+                                                       title="Düzenle"
+                                                       data-bs-toggle="tooltip">
+                                                        <i class="fas fa-edit"></i>
+                                                    </a>
+                                                    <a asp-action="Delete" asp-route-id="@item.Id" 
+                                                       class="btn btn-outline-danger btn-sm" 
+                                                       title="Sil"
+                                                       data-bs-toggle="tooltip">
+                                                        <i class="fas fa-trash"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- Boş Durum -->
+                <div class="text-center py-5">
+                    <div class="mb-4">
+                        <i class="fas fa-briefcase fa-5x text-muted"></i>
+                    </div>
+                    <h4 class="text-muted mb-3">Henüz hiç başvuru yok</h4>
+                    <p class="text-muted mb-4">İlk iş başvurunuzu ekleyerek başlayın!</p>
+                    <a asp-action="Create" class="btn btn-primary btn-lg">
+                        <i class="fas fa-plus me-2"></i>İlk Başvurumu Ekle
+                    </a>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Tooltip'leri aktif et
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+}
